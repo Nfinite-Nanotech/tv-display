@@ -26,7 +26,7 @@ Step 3: Click on tv-display-three.vercel.app
 The webpage uses javascript mainly to run. Open weather app is used to get the temp & humidity while papaparse is used to sync the google sheets to the app. The tank values are fetched every minute while the weather is fetched every 10 minutes. For any modifications, refer to App.jsx. If you need to modify webpage layout, check out App.css as well.
 
 ## Vercel
-The github page is linked with Vercel to deploy the webpage to the internet. The free version is used and has most of the features needed. The log in for Vercel is the engineering google account. The domain for this webpage is [tv-display-three.vercel.app]tv-display-three.vercel.app.
+The github page is linked with Vercel to deploy the webpage to the internet. The free version is used and has most of the features needed. The log in for Vercel is the engineering google account. The domain for this webpage is [tv-display-three.vercel.app](tv-display-three.vercel.app).
 
 
 # React + Vite
