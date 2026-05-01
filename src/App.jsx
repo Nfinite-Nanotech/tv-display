@@ -127,7 +127,7 @@ function App() { //bulk code for webpage
   }, []);
 
   //labels & colors
-  const labels = ["Tank 1", "Tank 2", "Tank 3", "Tower"];
+  const labels = ["Tank 1", "Tank 2", "Tank 3", "Tower"]; //change headings here
 
   const colors = ["#4CAF50", "#F44336", "#2196F3", "#FFC107"];
 
