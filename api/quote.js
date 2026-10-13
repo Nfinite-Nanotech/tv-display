@@ -13,7 +13,7 @@ export default async function handler(request, response) {
 
   try {
     const quoteUrl = new URL("https://api.api-ninjas.com/v1/quotes");
-    quoteUrl.searchParams.set("categories", "philosophy,happiness");
+    quoteUrl.searchParams.set("categories", "philosophy");
 
     const quoteResponse = await fetch(quoteUrl, {
       headers: { "X-Api-Key": apiKey },
