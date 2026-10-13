@@ -186,7 +186,7 @@
 .dashboard {
   box-sizing: border-box;
   display: flex;
-  height: 100svh;
+  height: calc(100svh - 100px);
   flex-direction: column;
   padding-top: 20px;
   background: #f9f9f9;

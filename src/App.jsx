@@ -24,7 +24,7 @@ const centerTextPlugin = {
       typeof value === "number" && !isNaN(value) ? value : 0;
 
     ctx.save();
-    ctx.font = "bold 80px Arial";
+    ctx.font = "bold 56px Arial";
     ctx.fillStyle = "#333";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
