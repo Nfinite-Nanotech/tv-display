@@ -24,7 +24,7 @@ const centerTextPlugin = {
       typeof value === "number" && !isNaN(value) ? value : 0;
 
     ctx.save();
-    ctx.font = "bold 56px Arial";
+    ctx.font = `bold ${window.innerWidth * 0.04}px Arial`;
     ctx.fillStyle = "#333";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
@@ -197,12 +197,10 @@ function App() { //bulk code for webpage
     <div className="dashboard">
       {/* TOP BAR */}
       <div className="dashboard-header">
-        <div>
-          <h1 className="dashboard-title">Nitrogen Tank Status</h1>
+        <div className="dashboard-heading">
+          <h1 className="dashboard-title">Nitrogen Status</h1>
+          <p className="dashboard-location">📍 {weather.city}</p>
         </div>
-        <p className="dashboard-location">
-             📍 {weather.city}
-        </p>
         <div className="dashboard-clock">
           <Clock />
         </div>
