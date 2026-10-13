@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Papa from "papaparse";
 import { useRef } from "react";
 import { Doughnut } from "react-chartjs-2";
@@ -60,6 +60,43 @@ function App() { //bulk code for webpage
   //sets the initial values
   const [values, setValues] = useState([0, 0, 0, 0]);
   const [weather, setWeather] = useState({ temp: "--", humidity: "--", city: "Loading...", iconUrl: ""})
+  const [advice, setAdvice] = useState("");
+  const [adviceError, setAdviceError] = useState("");
+  const [adviceLoading, setAdviceLoading] = useState(true);
+
+  const fetchAdvice = useCallback(async (signal) => {
+    setAdviceLoading(true);
+    setAdviceError("");
+
+    try {
+      const response = await fetch(
+        `https://api.adviceslip.com/advice?timestamp=${Date.now()}`,
+        { signal, cache: "no-store" }
+      );
+      if (!response.ok) {
+        throw new Error(`Advice API returned HTTP ${response.status}`);
+      }
+
+      const data = await response.json();
+      if (typeof data.slip?.advice !== "string" || !data.slip.advice.trim()) {
+        throw new Error("Advice API response did not contain advice text");
+      }
+
+      setAdvice(data.slip.advice);
+    } catch (error) {
+      if (signal?.aborted) return;
+      console.error("Advice fetch failed:", error);
+      setAdviceError("Advice is unavailable right now. Please try again.");
+    } finally {
+      if (!signal?.aborted) setAdviceLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    fetchAdvice(controller.signal);
+    return () => controller.abort();
+  }, [fetchAdvice]);
 
   // Fetch weather from the Internet
   const fetchWeather = async () => {
@@ -137,7 +174,7 @@ function App() { //bulk code for webpage
       {/* TOP BAR */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
         <div>
-          <script src="https://fixquotes.com/feeds/qotd.js"></script>
+          <h1 style={{ margin: 0 }}>Nitrogen Tank Status</h1>
         </div>
         <p style={{ margin: 0, color: '#666', fontWeight: 'bold', fontSize: '1.2rem' }}>
              📍 {weather.city}
@@ -177,83 +214,32 @@ function App() { //bulk code for webpage
         })}
       </div>
 
-      {/* BOTTOM BAR: AMBIENT DATA FROM INTERNET */}
-      <div style={{ 
-        display: "flex", 
-        justifyContent: "space-around", 
-        padding: 10,
-        marginTop: 0, 
-        background: '#ffffff', 
-        color: 'white', 
-        alignItems: 'center'
-      }}>
-
-        <div style={{ textAlign: 'center' }}>
-          {/* Using a <div> instead of <span> to avoid inherited text styles */}
-          <div style={{ 
-            textTransform: 'uppercase', 
-            fontSize: '2rem', 
-            letterSpacing: '2px', 
-            color: '#000000' // Light gray
-          }}>
-            Outdoor Temp
+      <div className="bottom-bar">
+        <div className="weather-group">
+          <div className="weather-reading">
+            <div className="weather-label">Outdoor Temp</div>
+            <h2>{weather.temp}°C</h2>
           </div>
 
-            {/* We override the global h2 color by using inline color here */}
-            <h2 style={{ 
-              fontSize: "3rem", 
-              margin: "10px 0", 
-              color: '#000000', // FORCE WHITE
-              lineHeight: '1' 
-            }}>
-              {weather.temp}°C
-            </h2>
+          <div className="weather-reading">
+            <div className="weather-label">Outdoor Humidity</div>
+            <h2>{weather.humidity}%</h2>
+          </div>
         </div>
 
-        {/* ICON WRAPPER */}
-        {weather.iconUrl && (
-          <div style={{
-            background: '#9f9f9f',        // Slightly darker gray for better contrast
-            borderRadius: '50%',
-            width: '160px',               // Reduced size slightly to prevent over-stretching
-            height: '160px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            border: '4px solid #ffffff', 
-            boxShadow: '0 4px 15px rgba(0,0,0,0.2)', // Soft outer shadow instead of inset
-            marginRight: '20px'
-          }}>
-            <img 
-              src={weather.iconUrl} 
-              alt="Weather Icon" 
-              style={{ 
-                width: '140px', 
-                height: '140px',
-                imageRendering: 'auto' // Set to auto if using @4x
-              }} 
-            />
-          </div>
-        )}
-
-        <div style={{ textAlign: 'center' }}>
-          <div style={{ 
-            textTransform: 'uppercase',
-            fontSize: '2rem', 
-            letterSpacing: '2px', 
-            color: '#000000' 
-          }}>
-            Outdoor Humidity
-          </div>
-          <h2 style={{ 
-            fontSize: "3rem", 
-            margin: "10px 0", 
-            color: '#000000', // FORCE WHITE
-            lineHeight: '1'
-          }}>
-            {weather.humidity}%
-          </h2>
+        <div className="weather-icon-slot">
+          {weather.iconUrl && (
+            <div className="weather-icon">
+              <img src={weather.iconUrl} alt="Weather Icon" />
+            </div>
+          )}
         </div>
+
+        <section className="advice-card" aria-label="Advice of the day">
+          <p className="advice-text" aria-live="polite">
+            {adviceLoading ? "Loading advice..." : adviceError || advice}
+          </p>
+        </section>
       </div>
     </div>
   );
