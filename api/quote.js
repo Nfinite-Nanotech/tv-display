@@ -12,7 +12,10 @@ export default async function handler(request, response) {
   }
 
   try {
-    const quoteResponse = await fetch("https://api.api-ninjas.com/v1/quotes", {
+    const quoteUrl = new URL("https://api.api-ninjas.com/v1/quotes");
+    quoteUrl.searchParams.set("categories", "philosophy,happiness");
+
+    const quoteResponse = await fetch(quoteUrl, {
       headers: { "X-Api-Key": apiKey },
     });
 
