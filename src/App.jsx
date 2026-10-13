@@ -24,7 +24,7 @@ const centerTextPlugin = {
       typeof value === "number" && !isNaN(value) ? value : 0;
 
     ctx.save();
-    ctx.font = "bold 48px Arial";
+    ctx.font = "bold 80px Arial";
     ctx.fillStyle = "#333";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
@@ -170,22 +170,22 @@ function App() { //bulk code for webpage
 
   //creating UI
   return (
-    <div style={{ marginTop: 20, fontFamily: 'Arial, sans-serif', backgroundColor: '#f9f9f9', minHeight: '100vh' }}>
+    <div className="dashboard">
       {/* TOP BAR */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+      <div className="dashboard-header">
         <div>
-          <h1 style={{ margin: 0 }}>Nitrogen Tank Status</h1>
+          <h1 className="dashboard-title">Nitrogen Tank Status</h1>
         </div>
-        <p style={{ margin: 0, color: '#666', fontWeight: 'bold', fontSize: '1.2rem' }}>
+        <p className="dashboard-location">
              📍 {weather.city}
         </p>
-        <div style={{ padding: 20, fontSize: 72, fontWeight: "bold" }}>
+        <div className="dashboard-clock">
           <Clock />
         </div>
       </div>
 
       {/* CHARTS */}
-      <div style={{ display: "flex", gap: 0, flexWrap: "nowrap", justifyContent: "center", marginBottom: 0 }}>
+      <div className="tank-chart-row">
         {values.map((val, i) => {
           const data = {
             labels: [labels[i], "Remaining"],
@@ -199,6 +199,7 @@ function App() { //bulk code for webpage
 
           const options = {
             cutout: "75%",
+            maintainAspectRatio: false,
             plugins: {
               legend: { display: false },
               tooltip: { enabled: true }
@@ -206,9 +207,11 @@ function App() { //bulk code for webpage
           };
 
           return (
-            <div key={i} style={{ flex: "1 1 0", minWidth: 0, textAlign: "center", background: 'white', padding: '15px' }}>
-              <h3 style={{ marginTop: 0 }}>{labels[i]}</h3>
-              <Doughnut data={data} options={options} />
+            <div key={i} className="tank-card">
+              <h3>{labels[i]}</h3>
+              <div className="tank-chart">
+                <Doughnut data={data} options={options} />
+              </div>
             </div>
           );
         })}
@@ -217,13 +220,13 @@ function App() { //bulk code for webpage
       <div className="bottom-bar">
         <div className="weather-group">
           <div className="weather-reading">
-            <div className="weather-label">Outdoor Temp</div>
-            <h2>{weather.temp}°C</h2>
+            <span>Temp:</span>
+            <strong>{weather.temp}°C</strong>
           </div>
 
           <div className="weather-reading">
-            <div className="weather-label">Outdoor Humidity</div>
-            <h2>{weather.humidity}%</h2>
+            <span>Humidity:</span>
+            <strong>{weather.humidity}%</strong>
           </div>
         </div>
 
