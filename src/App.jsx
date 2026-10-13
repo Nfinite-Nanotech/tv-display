@@ -70,23 +70,27 @@ function App() { //bulk code for webpage
 
     try {
       const response = await fetch(
-        `https://api.adviceslip.com/advice?timestamp=${Date.now()}`,
+        "/api/quote",
         { signal, cache: "no-store" }
       );
       if (!response.ok) {
-        throw new Error(`Advice API returned HTTP ${response.status}`);
+        throw new Error(`Quote API returned HTTP ${response.status}`);
       }
 
       const data = await response.json();
-      if (typeof data.slip?.advice !== "string" || !data.slip.advice.trim()) {
-        throw new Error("Advice API response did not contain advice text");
+      if (typeof data.quote !== "string" || !data.quote.trim()) {
+        throw new Error("Quote API response did not contain quote text");
       }
 
-      setAdvice(data.slip.advice);
+      const author =
+        typeof data.author === "string" && data.author.trim()
+          ? ` — ${data.author.trim()}`
+          : "";
+      setAdvice(`${data.quote.trim()}${author}`);
     } catch (error) {
       if (signal?.aborted) return;
-      console.error("Advice fetch failed:", error);
-      setAdviceError("Advice is unavailable right now. Please try again.");
+      console.error("Quote fetch failed:", error);
+      setAdviceError("A quote is unavailable right now. Please try again.");
     } finally {
       if (!signal?.aborted) setAdviceLoading(false);
     }
@@ -95,7 +99,16 @@ function App() { //bulk code for webpage
   useEffect(() => {
     const controller = new AbortController();
     fetchAdvice(controller.signal);
-    return () => controller.abort();
+
+    const adviceInterval = setInterval(
+      () => fetchAdvice(controller.signal),
+      60 * 60 * 1000
+    );
+
+    return () => {
+      clearInterval(adviceInterval);
+      controller.abort();
+    };
   }, [fetchAdvice]);
 
   // Fetch weather from the Internet
@@ -272,7 +285,7 @@ function App() { //bulk code for webpage
           )}
         </div>
 
-        <section className="advice-card" aria-label="Advice of the day">
+        <section className="advice-card" aria-label="Quote of the day">
           <p
             className="advice-text"
             aria-live="polite"

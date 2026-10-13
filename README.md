@@ -28,6 +28,8 @@ The webpage uses javascript mainly to run. Open weather app is used to get the t
 ## Vercel
 The github page is linked with Vercel to deploy the webpage to the internet. The free version is used and has most of the features needed. The log in for Vercel is the engineering google account. The domain for this webpage is [tv-display-three.vercel.app](tv-display-three.vercel.app).
 
+## Quote API
+Quotes are fetched through the `/api/quote` Vercel function, which keeps the API Ninjas key on the server. Set `API_NINJAS_KEY` in the Vercel project's Environment Variables before deploying. For local development, add `API_NINJAS_KEY=your_api_key` to an ignored `.env.local` file in the project root, then restart the Vite dev server. Do not use a `VITE_` prefix; that would expose the key in the browser.
 
 # React + Vite
 
