@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Papa from "papaparse";
 import { useRef } from "react";
 import { Doughnut } from "react-chartjs-2";
@@ -60,56 +60,45 @@ function App() { //bulk code for webpage
   //sets the initial values
   const [values, setValues] = useState([0, 0, 0, 0]);
   const [weather, setWeather] = useState({ temp: "--", humidity: "--", city: "Loading...", iconUrl: ""})
-  const [advice, setAdvice] = useState("");
-  const [adviceError, setAdviceError] = useState("");
-  const [adviceLoading, setAdviceLoading] = useState(true);
-
-  const fetchAdvice = useCallback(async (signal) => {
-    setAdviceLoading(true);
-    setAdviceError("");
-
-    try {
-      const response = await fetch(
-        "/api/quote",
-        { signal, cache: "no-store" }
-      );
-      if (!response.ok) {
-        throw new Error(`Quote API returned HTTP ${response.status}`);
-      }
-
-      const data = await response.json();
-      if (typeof data.quote !== "string" || !data.quote.trim()) {
-        throw new Error("Quote API response did not contain quote text");
-      }
-
-      const author =
-        typeof data.author === "string" && data.author.trim()
-          ? ` — ${data.author.trim()}`
-          : "";
-      setAdvice(`${data.quote.trim()}${author}`);
-    } catch (error) {
-      if (signal?.aborted) return;
-      console.error("Quote fetch failed:", error);
-      setAdviceError("A quote is unavailable right now. Please try again.");
-    } finally {
-      if (!signal?.aborted) setAdviceLoading(false);
-    }
-  }, []);
+  const [catImage, setCatImage] = useState(null);
+  const [catImageError, setCatImageError] = useState("");
 
   useEffect(() => {
     const controller = new AbortController();
-    fetchAdvice(controller.signal);
+    const fetchCat = async () => {
+      try {
+        const response = await fetch("/api/cat", {
+          signal: controller.signal,
+          cache: "no-store",
+        });
+        if (!response.ok) {
+          throw new Error(`Cat API returned HTTP ${response.status}`);
+        }
 
-    const adviceInterval = setInterval(
-      () => fetchAdvice(controller.signal),
-      60 * 60 * 1000
-    );
+        const result = await response.json();
+        const image = Array.isArray(result) ? result[0] : result;
+        if (typeof image?.url !== "string" || !image.url.trim()) {
+          throw new Error("Cat API response did not contain a usable photo");
+        }
+
+        setCatImage({
+          url: image.url,
+          alt: "Random cat",
+        });
+      } catch (error) {
+        if (controller.signal.aborted) return;
+        console.error("Cat image fetch failed:", error);
+        setCatImageError("A cat photo is unavailable right now.");
+      }
+    };
+    fetchCat();
+    const catRefreshInterval = setInterval(fetchCat, 60 * 60 * 1000);
 
     return () => {
-      clearInterval(adviceInterval);
+      clearInterval(catRefreshInterval);
       controller.abort();
     };
-  }, [fetchAdvice]);
+  }, []);
 
   // Fetch weather from the Internet
   const fetchWeather = async () => {
@@ -203,17 +192,6 @@ function App() { //bulk code for webpage
 
   const colors = ["#4CAF50", "#F44336", "#2196F3", "#FFC107"];
 
-  const getAdviceTextSize = (text) => {
-    const length = text?.length ?? 0;
-
-    if (length <= 45) return "clamp(1.25rem, 2vw, 2.5rem)";
-    if (length <= 90) return "clamp(1rem, 1.7vw, 2rem)";
-    if (length <= 140) return "clamp(0.9rem, 1.3vw, 1.5rem)";
-    return "clamp(0.8rem, 1vw, 1.25rem)";
-  };
-
-  const adviceText = adviceLoading ? "Loading advice..." : adviceError || advice;
-
   //creating UI
   return (
     <div className="dashboard">
@@ -285,14 +263,14 @@ function App() { //bulk code for webpage
           )}
         </div>
 
-        <section className="advice-card" aria-label="Quote of the day">
-          <p
-            className="advice-text"
-            aria-live="polite"
-            style={{ fontSize: getAdviceTextSize(adviceText) }}
-          >
-            {adviceText}
-          </p>
+        <section className="cat-photo-card" aria-label="Cat photo">
+          {catImage ? (
+            <img className="cat-image" src={catImage.url} alt={catImage.alt} />
+          ) : (
+            <p className="cat-image-message" role={catImageError ? "status" : undefined}>
+              {catImageError || "Loading cat photo..."}
+            </p>
+          )}
         </section>
       </div>
     </div>
