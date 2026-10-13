@@ -182,3 +182,35 @@
     border-right-color: var(--border);
   }
 }
+
+.fixquotes-qotd {
+  font-family: Georgia, "Times New Roman", serif;
+  max-width: 460px;
+  margin: 1.5rem auto;
+  padding: 8px;
+  background: #ffffff;
+}
+
+.fixquotes-qotd-title {
+  display: none;
+}
+
+.fixquotes-qotd-quote {
+  font-size: 20px;
+  color: #212529;
+  font-style: italic;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.fixquotes-qotd-author {
+  font-size: 15px;
+  color: #6c757d;
+}
+
+.fixquotes-qotd-author a {
+  color: #333333;
+  font-weight: 700;
+  text-decoration: none;
+}
+

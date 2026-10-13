@@ -137,7 +137,7 @@ function App() { //bulk code for webpage
       {/* TOP BAR */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
         <div>
-          <h1 style={{ margin: 0 }}>Nitrogen Tank Status</h1>
+          <script src="https://fixquotes.com/feeds/qotd.js"></script>
         </div>
         <p style={{ margin: 0, color: '#666', fontWeight: 'bold', fontSize: '1.2rem' }}>
              📍 {weather.city}
