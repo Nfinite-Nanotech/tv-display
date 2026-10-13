@@ -100,26 +100,48 @@ function App() { //bulk code for webpage
 
   // Fetch weather from the Internet
   const fetchWeather = async () => {
-    const API_KEY = import.meta.env.VITE_WEATHER_KEY; // 👈 Put your key here
-    const CITY = 'Waterloo,CA'; // 👈 Change to your city
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${CITY}&units=metric&appid=${API_KEY}`; //uses open weather map
+    const API_KEY = import.meta.env.VITE_WEATHER_KEY?.trim();
+    const CITY = "Waterloo,CA";
+
+    if (!API_KEY) {
+      setWeather({
+        temp: 21,
+        humidity: 54,
+        city: "Waterloo, CA",
+        iconUrl: "https://openweathermap.org/img/wn/01d@4x.png",
+      });
+      return;
+    }
+
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${CITY}&units=metric&appid=${API_KEY}`;
 
     try {
       const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error(`Weather API returned HTTP ${response.status}`);
+      }
+
       const data = await response.json();
       if (data.main && data.weather) {
         const iconCode = data.weather[0].icon;
-        const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@4x.png`; //fetching icons
+        const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@4x.png`;
 
         setWeather({
           temp: Math.round(data.main.temp),
           humidity: data.main.humidity,
           city: data.name,
-          iconUrl: iconUrl
+          iconUrl,
         });
       }
     } catch (error) {
       console.error("Weather fetch failed:", error);
+      setWeather({
+        temp: 21,
+        humidity: 54,
+        city: "Waterloo, CA",
+        iconUrl: "https://openweathermap.org/img/wn/01d@4x.png",
+      });
     }
   };
 
@@ -168,6 +190,17 @@ function App() { //bulk code for webpage
 
   const colors = ["#4CAF50", "#F44336", "#2196F3", "#FFC107"];
 
+  const getAdviceTextSize = (text) => {
+    const length = text?.length ?? 0;
+
+    if (length <= 45) return "clamp(1.25rem, 2vw, 2.5rem)";
+    if (length <= 90) return "clamp(1rem, 1.7vw, 2rem)";
+    if (length <= 140) return "clamp(0.9rem, 1.3vw, 1.5rem)";
+    return "clamp(0.8rem, 1vw, 1.25rem)";
+  };
+
+  const adviceText = adviceLoading ? "Loading advice..." : adviceError || advice;
+
   //creating UI
   return (
     <div className="dashboard">
@@ -185,6 +218,7 @@ function App() { //bulk code for webpage
       </div>
 
       {/* CHARTS */}
+      <div className="tank-section-divider" aria-hidden="true" />
       <div className="tank-chart-row">
         {values.map((val, i) => {
           const data = {
@@ -239,8 +273,12 @@ function App() { //bulk code for webpage
         </div>
 
         <section className="advice-card" aria-label="Advice of the day">
-          <p className="advice-text" aria-live="polite">
-            {adviceLoading ? "Loading advice..." : adviceError || advice}
+          <p
+            className="advice-text"
+            aria-live="polite"
+            style={{ fontSize: getAdviceTextSize(adviceText) }}
+          >
+            {adviceText}
           </p>
         </section>
       </div>
