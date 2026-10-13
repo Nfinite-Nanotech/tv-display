@@ -183,12 +183,94 @@
   }
 }
 
+.dashboard {
+  box-sizing: border-box;
+  display: flex;
+  height: 100svh;
+  flex-direction: column;
+  padding-top: 20px;
+  background: #f9f9f9;
+  font-family: Arial, sans-serif;
+  line-height: normal;
+}
+
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+  padding: 0 16px;
+}
+
+.dashboard-title {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 4.5rem);
+  line-height: 1.1;
+}
+
+.dashboard-location {
+  margin: 0;
+  color: #666666;
+  font-size: 1.2rem;
+  font-weight: bold;
+  line-height: 1.2;
+}
+
+.dashboard-clock {
+  padding: 8px;
+  font-size: clamp(2rem, 5.5vw, 6rem);
+  font-weight: bold;
+  line-height: 1.2;
+}
+
+.tank-chart-row {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+}
+
+.tank-card {
+  box-sizing: border-box;
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  height: 100%;
+  padding: 6px 12px 12px;
+  background: #ffffff;
+  text-align: center;
+}
+
+.tank-card h3 {
+  flex: 0 0 auto;
+  margin: 0 0 4px;
+  font-size: 2.25rem;
+  line-height: 1.2;
+}
+
+.tank-chart {
+  flex: 0 1 auto;
+  min-height: 0;
+  width: min(100%, 58svh);
+  max-height: 620px;
+  aspect-ratio: 1;
+}
+
+.tank-chart canvas {
+  max-width: 100%;
+}
+
 .bottom-bar {
   display: grid;
+  flex: 0 0 auto;
   grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 2fr);
   align-items: center;
   gap: 24px;
-  padding: 16px;
+  padding: 16px 16px 40px;
   background: #ffffff;
 }
 
@@ -196,8 +278,20 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   align-items: center;
-  gap: 12px;
+  gap: 4px;
   min-width: 0;
+}
+
+.weather-reading {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  font-size: clamp(1.75rem, 2.5vw, 2.75rem);
+  line-height: 1.2;
+}
+
+.weather-reading strong {
+  color: #000000;
 }
 
 .weather-icon-slot {
@@ -205,24 +299,6 @@
   width: 100%;
   align-items: center;
   justify-content: center;
-}
-
-.weather-reading {
-  text-align: center;
-}
-
-.weather-label {
-  color: #000000;
-  font-size: 1.5rem;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-
-.weather-reading h2 {
-  margin: 10px 0 0;
-  color: #000000;
-  font-size: 3rem;
-  line-height: 1;
 }
 
 .weather-icon {
@@ -248,19 +324,49 @@
   align-items: center;
   justify-content: flex-end;
   min-width: 0;
-  padding: 16px 0 16px 16px;
+  padding: 16px 48px 16px 16px;
 }
 
 .advice-text {
   margin: 0;
   color: #212529;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 20px;
+  font-size: clamp(1.75rem, 2.25vw, 2.5rem);
   font-style: italic;
   line-height: 1.4;
 }
 
 @media (max-width: 700px) {
+  .dashboard-header {
+    gap: 8px;
+    padding-inline: 8px;
+  }
+
+  .dashboard-title {
+    font-size: 1.5rem;
+  }
+
+  .dashboard-location {
+    font-size: 0.8rem;
+  }
+
+  .dashboard-clock {
+    padding: 4px;
+    font-size: 1.25rem;
+  }
+
+  .tank-card {
+    padding: 6px;
+  }
+
+  .tank-card h3 {
+    font-size: 1rem;
+  }
+
+  .tank-chart {
+    height: clamp(160px, 38vh, 280px);
+  }
+
   .bottom-bar {
     grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 2fr);
     gap: 8px;
@@ -277,13 +383,10 @@
     padding: 0;
   }
 
-  .weather-label {
-    font-size: 0.7rem;
-    letter-spacing: 0;
-  }
-
-  .weather-reading h2 {
-    font-size: 1.5rem;
+  .weather-reading {
+    flex-wrap: wrap;
+    gap: 4px;
+    font-size: 1rem;
   }
 
   .weather-icon {
@@ -301,6 +404,6 @@
   }
 
   .advice-text {
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
 }
