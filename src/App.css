@@ -214,7 +214,7 @@
 
 .dashboard-title {
   margin: 0;
-  font-size: clamp(200%, 6vw, 500%);
+  font-size: clamp(200%, 6vw, 400%);
   line-height: 1.1;
   transform: translateY(-0.2em);
 }
@@ -333,8 +333,8 @@
 
 .weather-icon {
   display: flex;
-  width: 200px;
-  height: 200px;
+  height: 100%;
+  width: height;
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
@@ -345,8 +345,8 @@
 }
 
 .weather-icon img {
-  width: 140px;
-  height: 140px;
+  width: 100%px;
+  height: 100%;
 }
 
 .cat-photo-card {
