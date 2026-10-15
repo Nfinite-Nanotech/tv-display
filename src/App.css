@@ -308,7 +308,7 @@
   align-items: center;
   justify-content: center;
   gap: 4px;
-  font-size: 5.5vw;
+  font-size: clamp(48px, 5.5vw, 120px);
   line-height: 1.2;
 }
 
@@ -368,6 +368,13 @@
 .cat-image-message {
   margin: 0;
   color: #666666;
+}
+
+@media (min-width: 2560px) {
+  .bottom-bar {
+    flex-basis: 300px;
+    height: 300px;
+  }
 }
 
 @media (max-width: 700px) {
