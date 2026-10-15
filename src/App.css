@@ -260,7 +260,7 @@
   justify-content: flex-end;
   min-width: 0;
   height: 100%;
-  padding: 5px 12px 5px;
+  padding: 5px 5px 5px;
   background: #ffffff;
   text-align: center;
 }
@@ -275,7 +275,7 @@
 .tank-chart {
   flex: 0 1 auto;
   min-height: 0;
-  width: 100%;
+  width: min(calc(25vw - 24px), 54svh);
   max-height: 100%;
   aspect-ratio: 1;
 }
@@ -382,7 +382,7 @@
   }
 
   .tank-chart-row {
-    flex: 1.8 1 0;
+    flex: 0 0 60svh;
     padding-bottom: 0;
   }
 
