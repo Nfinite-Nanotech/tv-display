@@ -302,12 +302,12 @@
   align-items: center;
   justify-content: center;
   gap: 4px;
-  font-size: 5vw;
+  font-size: 5.5vw;
   line-height: 1.2;
 }
 
 .weather-reading span {
-  font-size: 55%;
+  font-size: 60%;
 }
 
 .weather-reading strong {
@@ -323,8 +323,8 @@
 
 .weather-icon {
   display: flex;
-  width: 120px;
-  height: 120px;
+  width: 150px;
+  height: 150px;
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
@@ -335,8 +335,8 @@
 }
 
 .weather-icon img {
-  width: 110px;
-  height: 110px;
+  width: 140px;
+  height: 140px;
 }
 
 .cat-photo-card {
@@ -344,13 +344,14 @@
   align-items: center;
   justify-content: center;
   min-width: 0;
+  height: 240px;
   padding: 16px;
 }
 
 .cat-image {
   display: block;
   width: 100%;
-  max-height: 240px;
+  height: 100%;
   border-radius: 8px;
   object-fit: contain;
 }
@@ -405,17 +406,18 @@
 
   .cat-photo-card {
     justify-content: center;
+    height: 140px;
     padding: 0;
   }
 
   .weather-reading {
     gap: 4px;
-    font-size: 5vw;
+    font-size: 6vw;
   }
 
   .weather-icon {
-    width: 64px;
-    height: 64px;
+    width: 80px;
+    height: 80px;
   }
 
   .weather-icon-slot {
@@ -423,11 +425,8 @@
   }
 
   .weather-icon img {
-    width: 60px;
-    height: 60px;
+    width: 74px;
+    height: 74px;
   }
 
-  .cat-image {
-    max-height: 140px;
-  }
 }
